@@ -3,10 +3,14 @@
   outputs = { self }: {
     templates = {
       sbc = {
-          path = ./sbc;
+        path = ./sbc;
         description = "SBC template";
       };
-    defaultTemplate = self.templates.sbc;
-  };
+      infufrgs = {
+        path = ./infufrgs;
+        description = "INF/UFRGS thesis/dissertation template (infufrgs class)";
+      };
+      default = self.templates.sbc;
+    };
   };
 }
