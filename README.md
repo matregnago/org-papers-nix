@@ -8,7 +8,7 @@ Org-mode templates for conference papers and theses, built reproducibly with Nix
 | `infufrgs` | https://github.com/schnorr/infufrgs       |
 
 ```sh
-nix flake init -t github:<owner>/org-papers-nix#infufrgs
+nix flake init -t github:matregnago/org-papers-nix#infufrgs
 nix build
 nix develop -c make
 ```
