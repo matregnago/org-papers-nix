@@ -1,1 +1,11 @@
 result
+sbc.tex
+sbc.pdf
+refs.bib
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out

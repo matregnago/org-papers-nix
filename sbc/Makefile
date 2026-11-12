@@ -1,33 +1,26 @@
 NAME=sbc
 ARCHIVE=replicable
-# ARCHIVE_FILES=$(shell git ls-tree -r master --name-only | grep -v -e '$(NAME).pdf')
-ARCHIVE_FILES=$(NAME).org refs.bib Makefile figures/*
+ARCHIVE_FILES=$(NAME).org Makefile figures/*
 
+# Run inside `nix develop` so that emacs (with org-ref) and TeX Live are available.
 all: $(NAME).pdf
 
-# If you have good Emacs and Org-mode installed by default, delete "-l ~/.emacs.d/init.el"
-%.tex: %.org
-	emacs -batch -l ~/.emacs.d/init.el $^  --funcall org-babel-tangle
-	emacs -batch -l ~/.emacs.d/init.el --eval "(setq enable-local-eval t)" --eval "(setq enable-local-variables t)" \
-	--eval "(setq org-export-babel-evaluate t)" $^  --funcall org-latex-export-to-latex
+%.tex: %.org export.el
+	emacs --batch --load export.el
 
 %.pdf: %.tex
-	pdflatex $^
-	bibtex `basename $^ .tex`
-	pdflatex $^
-	pdflatex $^
-
-%.html: %.org
-	emacs -batch -l ~/.emacs.d/init.el --eval "(setq enable-local-eval t)" --eval "(setq enable-local-variables t)" \
-	   --eval "(setq org-export-babel-evaluate t)" $^  --funcall org-html-export-to-html
+	latexmk -pdf -interaction=nonstopmode $<
 
 $(ARCHIVE).tgz: $(ARCHIVE_FILES)
 	tar --xform "s|^|$(ARCHIVE)/|" -zcf $@ $^
 
 nix:
 	nix build .
+
 clean:
-	rm -f $(NAME).aux $(NAME).bbl $(NAME).blg $(NAME).log $(NAME).out *~
+	latexmk -c $(NAME).tex
 
 distclean: clean
-	rm -f $(NAME).html $(NAME).tex $(NAME).pdf
+	rm -f $(NAME).tex $(NAME).pdf refs.bib
+
+.PHONY: all nix clean distclean

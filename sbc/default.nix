@@ -16,4 +16,8 @@ rec {
       cp sbc.pdf $out/
     '';
   };
+
+  shell = pkgs.mkShell {
+    packages = [ emacs pkgs.texliveFull ];
+  };
 }

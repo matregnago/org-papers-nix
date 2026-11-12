@@ -14,6 +14,7 @@
       in
       {
         packages.default = paper.pdf;
+        devShells.default = paper.shell;
       }
     );
 }
